@@ -1,0 +1,8 @@
+emqx使用docker启动
+docker pull emqx/emqx:5.7.0
+
+$name="moe_emqx"
+docker run -d --name $name -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 -v ${PWD}/data:/opt/emqx/data -v ${PWD}/log:/opt/emqx/log emqx/emqx:26.1.1
+
+$name="moe_emqx"
+docker run -d --name $name -p 1883:1883 -p 8883:8883 -p 8083:8083 -p 8084:8084 -p 8081:8081 -p 18083:18083  emqx/emqx:5.7.0
