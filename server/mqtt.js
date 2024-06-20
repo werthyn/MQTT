@@ -1,6 +1,5 @@
 const mqtt = require('mqtt')
-
-const mqttTopics = require('./topics/mqttTopics')
+const consumer = require('./mqtt/consumer');  
 //mqtt端口号：
 // 1883	   MQTT 协议端口
 // 8883	   MQTT/SSL 端口
@@ -40,25 +39,32 @@ client.on('error', (error) => {
 })
 
 client.on("message", (topic, message) => {
-    // 找到匹配的topic
-    const matchingTopic = mqttTopics.find(v => v.topic === topic);
-    // 检查是否找到了匹配的 topic
-    if (matchingTopic) {
-        // 调用找到的 topic 的 dataFormat 函数，并传入 message, 转化为对象格式
-        matchingTopic.dataFormat(message)
-        //处理数据
-        .then(data =>{
-            for (const handler of matchingTopic.pipeline.handlers) {  
-                data = handler(data).data;
-                //handler(data).status是是否跳过，查看状态使用
-            }  
-            //存入数据库
-            matchingTopic.pipeline.saveToDatabase(data);
-        });
-    } else {
-        // 如果没有找到匹配的 topic，可以打印一条消息或执行其他逻辑
-        console.log(`没有找到匹配的topic: ${topic}`);
-    }
+    // // 找到匹配的topic
+    // const matchingTopic = mqttTopics.find(v => v.topic === topic);
+    // // 检查是否找到了匹配的 topic
+    // if (matchingTopic) {
+    //     // 调用找到的 topic 的 dataFormat 函数，并传入 message, 转化为对象格式
+    //     matchingTopic.dataFormat(message)
+    //     //处理数据
+    //     .then(data =>{
+    //         for (const handler of matchingTopic.pipeline.handlers) {  
+    //             data = handler(data).data;
+    //             //handler(data).status是是否跳过，查看状态使用
+    //         }  
+    //         //存入数据库
+    //         matchingTopic.pipeline.saveToDatabase(data);
+    //     });
+    // } else {
+    //     // 如果没有找到匹配的 topic，可以打印一条消息或执行其他逻辑
+    //     console.log(`没有找到匹配的topic: ${topic}`);
+    // }
+    try {  
+        const rawData = JSON.parse(message.toString());
+        consumer.consumeData(rawData); 
+    } catch (error) {  
+        // 解析失败 
+        console.log(error)
+    }  
 });
 
 module.exports = client
