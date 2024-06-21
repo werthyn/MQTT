@@ -43,12 +43,11 @@ class DataConsumer {
 
     format(rawData) {  
         return new Promise((resolve, reject) => {
-            let dataPoint = null;  
             for (const formatter of this.formatters) {  
-                dataPoint = formatter.format(rawData); // 尝试使用不同的formatter来格式化数据  
+                rawData = formatter.format(rawData); // 尝试使用不同的formatter来格式化数据  
                 // if (dataPoint) break; // 假设一旦有formatter能格式化数据就停止循环  
             }  
-            resolve(dataPoint)
+            resolve(rawData)
         })
     }  
 

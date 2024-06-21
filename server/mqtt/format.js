@@ -11,7 +11,6 @@ class DecodeJsonMessage {
             // 假设rawData已经是正确的格式，直接返回DataPoint对象  
             const DataPointClass = this.config.dataPointClass;
 
-            console.log("rawData:" + JSON.stringify(new DataPointClass(rawData)))
             return new DataPointClass(rawData);  
         } catch (error) {  
             // 解析失败 
