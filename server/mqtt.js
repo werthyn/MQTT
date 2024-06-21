@@ -59,8 +59,7 @@ client.on("message", (topic, message) => {
     //     console.log(`没有找到匹配的topic: ${topic}`);
     // }
     try {  
-        const rawData = JSON.parse(message.toString());
-        consumer.consumeData(rawData); 
+        consumer.consumeData(message); 
     } catch (error) {  
         // 解析失败 
         console.log(error)
